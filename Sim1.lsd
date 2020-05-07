@@ -120,6 +120,7 @@ Label Root
 				Param: _ID1
 				Param: _bank1
 				Param: _pOrd1
+				Param: _public1
 				Param: _t1ent
 				Func: _cred1
 				Var: _Atau
@@ -154,62 +155,11 @@ Label Root
 
 			}
 
-			Son: Firm1p
-			Label Firm1p
-			{
-				Son: Clip
-				Label Clip
-				{
-					Param: _tOrdp
-					Param: _nOrdp
-					Param: _nCanp
-					Param: _IDcp
-					Param: _tSelp
-
-				}
-
-				Var: _teste2
-				Var: _Ataup
-				Var: _Btaup
-				Var: _L1rdp
-				Var: _L1dRDp
-				Var: _RDp
-				Var: _S1p
-				Var: _p1p
-				Var: _c1p
-				Var: _Q1ep
-				Var: _L1dp
-				Var: _L1p
-				Var: _Q1p
-				Var: _NW1p
-				Var: _D1p
-				Var: _BCp
-				Var: _cred1p
-				Var: _Deb1maxp
-				Var: _cred1cp
-				Var: _W1p
-				Var: _Deb1p
-				Var: _imip
-				Var: _innp
-				Var: _NCp
-				Var: _HCp
-				Param: _ID1p
-				Var: _Tax1p
-				Var: _Pi1p
-				Var: _Div1p
-				Var: _qc1p
-				Var: _JO1p
-				Var: _f1p
-				Param: _bank1p
-				Param: _pOrd1p
-				Param: _t1entp
-
-			}
-
 			Param: Deb10ratio
 			Param: F10
 			Param: F1max
 			Param: F1min
+			Param: F1p
 			Param: L1rdMax
 			Param: L1shortMax
 			Param: NW10
@@ -667,8 +617,9 @@ Param: Deb10ratio 0 n + n n	1
 Param: F10 0 n + n n	50
 Param: F1max 0 n + n n	50
 Param: F1min 0 n + n n	50
+Param: F1p 0 n + n n	25
 Param: L1rdMax 0 n + n n	0.2
-Param: L1shortMax 0 n + n n	0.2
+Param: L1shortMax 0 n + n n	1
 Param: NW10 0 n + n n	10000
 Param: PPI0 0 n + n n	0
 Param: Phi3 0 n + n n	0.1
@@ -720,6 +671,7 @@ Object: Firm1 C	1
 Param: _ID1 0 n + n n	0
 Param: _bank1 0 n + n n	0
 Param: _pOrd1 0 n + n n	0
+Param: _public1 0 n + n n	0
 Param: _t1ent 0 n + n n	0
 Func: _cred1 0 n + n n
 Var: _Atau 1 n + n n	1
@@ -758,50 +710,6 @@ Param: _nCan 0 n + n n	0
 Param: _nOrd 0 n + n n	0
 Param: _tOrd 0 n + n n	0
 Param: _tSel 0 n + n n	0
-
-Object: Firm1p C	1
-Var: _teste2 0 s + n n
-Var: _Ataup 1 s + n n	1
-Var: _Btaup 1 s + n n	1
-Var: _L1rdp 1 s + n p	0.2
-Var: _L1dRDp 0 s + n n
-Var: _RDp 0 s + n n
-Var: _S1p 1 s + n n	0
-Var: _p1p 0 s + n n
-Var: _c1p 0 s + n n
-Var: _Q1ep 0 s + n n
-Var: _L1dp 0 s + n n
-Var: _L1p 1 s + n n	0
-Var: _Q1p 0 s + n n
-Var: _NW1p 1 s + n n	0
-Var: _D1p 0 s + n n
-Var: _BCp 7 s + n n	0	0	0	0	0	0	0
-Var: _cred1p 0 s + n n
-Var: _Deb1maxp 0 s + n n
-Var: _cred1cp 0 s + n n
-Var: _W1p 1 s + n n	0
-Var: _Deb1p 1 s + n n	0
-Var: _imip 0 s + n n
-Var: _innp 0 s + n n
-Var: _NCp 0 n + n n
-Var: _HCp 0 n + n n
-Param: _ID1p 0 n + n n	0
-Var: _Tax1p 0 n + n n
-Var: _Pi1p 0 s + n n
-Var: _Div1p 0 n + n n
-Var: _qc1p 1 s + n n	0
-Var: _JO1p 0 n + n n
-Var: _f1p 1 n + n n	0
-Param: _bank1p 0 n + n n	0
-Param: _pOrd1p 0 n + n n	0
-Param: _t1entp 0 n + n n	0
-
-Object: Clip C	1
-Param: _tOrdp 0 n + n n	0
-Param: _nOrdp 0 n + n n	0
-Param: _nCanp 0 n + n n	0
-Param: _IDcp 0 n + n n	0
-Param: _tSelp 0 n + n n	0
 
 Object: Consumption C	1
 Param: Deb20ratio 0 n + n n	1
@@ -1017,7 +925,7 @@ Var: wReal 0 s + n n
 
 SIM_NUM 1
 SEED 1
-MAX_STEP 50
+MAX_STEP 500
 EQUATION fun_KS.cpp
 MODELREPORT modelreport.html
 
@@ -1767,6 +1675,13 @@ _INIT_
 All 1 instances equal to 1.
 END_DESCRIPTION
 
+Parameter_F1p
+Initial number of public firms in capital-good sector
+(>=F1pMin)
+_INIT_
+All 1 instances equal to 25.
+END_DESCRIPTION
+
 Parameter_L1rdMax
 Maximum share of workers in R&D
 (0, 1)
@@ -1778,7 +1693,7 @@ Parameter_L1shortMax
 Maximum labor shortage allowed in capital-good sector
 (0, 1)
 _INIT_
-All 1 instances equal to 0.2.
+All 1 instances equal to 1.
 END_DESCRIPTION
 
 Parameter_NW10
@@ -2104,6 +2019,14 @@ _INIT_
 All 20 instances equal to 0.
 END_DESCRIPTION
 
+Parameter__public1
+Type of capital-good firm
+0 = private firm
+1 = public firm
+_INIT_
+All 1 instances equal to 0.
+END_DESCRIPTION
+
 Parameter__t1ent
 Period of firm entry in capital-good sector
 _INIT_
@@ -2327,259 +2250,6 @@ Parameter__tSel
 Last time firm was selected by client firm
 _INIT_
 All 20 instances equal to 0.
-END_DESCRIPTION
-
-Object_Firm1p
-(no description available)
-
-_INIT_
-
-END_DESCRIPTION
-
-Variable__teste2
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Ataup
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Btaup
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__L1rdp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__L1dRDp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__RDp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__S1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__p1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__c1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Q1ep
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__L1dp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__L1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Q1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__NW1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__D1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__BCp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__cred1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Deb1maxp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__cred1cp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__W1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Deb1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__imip
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__innp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__NCp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__HCp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__ID1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Tax1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Pi1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__Div1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__qc1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__JO1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Variable__f1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__bank1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__pOrd1p
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__t1entp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Object_Clip
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__tOrdp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__nOrdp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__nCanp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__IDcp
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
-Parameter__tSelp
-(no description available)
-_INIT_
-
 END_DESCRIPTION
 
 Object_Consumption

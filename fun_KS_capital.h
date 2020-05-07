@@ -37,7 +37,9 @@ else
 	v[6] = 1;									// no shortage
 
 RESULT( v[2] + ( v[3] - v[2] ) * v[6] )
-// ISNT IT V[1]-V[2]?
+// ISNT IT V[1]-V[2]? 
+// No, v[1] (Ls) is the total supply and v[2] (L1rd) is just the R&D people in sector 1
+
 
 EQUATION( "MC1" )
 /*
@@ -78,23 +80,36 @@ CYCLE( cur, "Firm1" )
 {
 	v[4] = VS( cur, "_NW1" );					// current net wealth
 	
-	if ( v[4] < 0 || T >= VS( cur, "_t1ent" ) + n1 )// bankrupt or incumbent?
+	if ( VS( cur, "_public1" ) )				// public firms don't exit
 	{
-		for ( v[5] = j = 0; j < n1; ++j )
-			v[5] += VLS( cur, "_BC", j );		// n1 periods customer number
-		
-		if ( v[4] < 0 || v[5] <= 0 )
+		if ( v[4] < 0 )							// provide more equity if needed
 		{
-			quit[ i ] = true;					// mark for likely exit
-			--h;								// one less firm
+			// new equity required
+			v[6] = NW10u + VS( cur, "_Deb1" ) - VS( cur, "_NW1" );
+			v[1] += v[6];						// accumulate "entry" equity cost
 			
-			if ( v[5] > v[3] )					// best firm so far?
-			{
-				k = i;							// save firm index
-				v[3] = v[5];					// and customer number
-			}
+			WRITES( cur, "_Deb1", 0 );			// reset debt
+			INCRS( cur, "_NW1", v[6] );			// add new equity
 		}
 	}
+	else
+		if ( v[4] < 0 || T >= VS( cur, "_t1ent" ) + n1 )// bankrupt or incumbent?
+		{
+			for ( v[5] = j = 0; j < n1; ++j )
+				v[5] += VLS( cur, "_BC", j );	// n1 periods customer number
+			
+			if ( v[4] < 0 || v[5] <= 0 )
+			{
+				quit[ i ] = true;				// mark for likely exit
+				--h;							// one less firm
+				
+				if ( v[5] > v[3] )				// best firm so far?
+				{
+					k = i;						// save firm index
+					v[3] = v[5];				// and customer number
+				}
+			}
+		}
 	
 	++i;
 }	
@@ -145,7 +160,7 @@ if ( F1 + k > F1max )
 	k = F1max - F1 + j;
 
 v[0] = k - j;									// net number of entrants
-v[1] += entry_firm1( p, k, false );				// add entrant-firm objects
+v[1] += entry_firm1( p, k, 0, false );			// add entrant-firm objects
 
 i = INCR( "F1", v[0] );							// update the number of firms
 INCRS( PARENT, "cEntry", v[1] );				// account equity cost of entry

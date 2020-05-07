@@ -120,6 +120,7 @@ Label Root
 				Param: _ID1
 				Param: _bank1
 				Param: _pOrd1
+				Param: _public1
 				Param: _t1ent
 				Func: _cred1
 				Var: _Atau
@@ -158,6 +159,7 @@ Label Root
 			Param: F10
 			Param: F1max
 			Param: F1min
+			Param: F1p
 			Param: L1rdMax
 			Param: L1shortMax
 			Param: NW10
@@ -615,8 +617,9 @@ Param: Deb10ratio 0 n + n n	1
 Param: F10 0 n + n n	50
 Param: F1max 0 n + n n	100
 Param: F1min 0 n + n n	1
+Param: F1p 0 n + n n	25
 Param: L1rdMax 0 n + n n	0.2
-Param: L1shortMax 0 n + n n	0.2
+Param: L1shortMax 0 n + n n	1
 Param: NW10 0 n + n n	10000
 Param: PPI0 0 n + n n	0
 Param: Phi3 0 n + n n	0.1
@@ -668,6 +671,7 @@ Object: Firm1 C	1
 Param: _ID1 0 n + n n	0
 Param: _bank1 0 n + n n	0
 Param: _pOrd1 0 n + n n	0
+Param: _public1 0 n + n n	0
 Param: _t1ent 0 n + n n	0
 Func: _cred1 0 n + n n
 Var: _Atau 1 n + n n	1
@@ -1671,6 +1675,13 @@ _INIT_
 All 1 instances equal to 1.
 END_DESCRIPTION
 
+Parameter_F1p
+Initial number of public firms in capital-good sector
+(>=F1pMin)
+_INIT_
+All 1 instances equal to 25.
+END_DESCRIPTION
+
 Parameter_L1rdMax
 Maximum share of workers in R&D
 (0, 1)
@@ -1682,7 +1693,7 @@ Parameter_L1shortMax
 Maximum labor shortage allowed in capital-good sector
 (0, 1)
 _INIT_
-All 1 instances equal to 0.2.
+All 1 instances equal to 1.
 END_DESCRIPTION
 
 Parameter_NW10
@@ -2006,6 +2017,14 @@ Parameter__pOrd1
 Credit pecking order position in capital-good sector
 _INIT_
 All 20 instances equal to 0.
+END_DESCRIPTION
+
+Parameter__public1
+Type of capital-good firm
+0 = private firm
+1 = public firm
+_INIT_
+All 1 instances equal to 0.
 END_DESCRIPTION
 
 Parameter__t1ent
@@ -3542,7 +3561,6 @@ END_DESCRIPTION
 
 DOCUOBSERVE
 Root
-_postChg
 _A2
 _E
 _JO2

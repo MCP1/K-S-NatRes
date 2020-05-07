@@ -40,6 +40,11 @@ struct country
 
 
 //What does a HOOK do?
+// A HOOK is an LSD/C++ pointer to an existing object in the model, so it can be
+// accessed without searching for speed/efficiency/simplicity. See LSD docs for 
+// overall details and C++ literature for operational ones. HOOKS are very important
+// in K+S and are usually kept in fun_KS_support.h functions.
+
 /*========================= HOOK-RELATED DEFINITIONS =========================*/
 
 // number of dynamic hooks per object type

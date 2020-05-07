@@ -1,5 +1,5 @@
-Variable-firm-number K+S Model (version 0.3)
-============================================
+K+S Model with National Research Labs (version 0.3.1)
+=====================================================
 
 This version copyright by Marcelo C. Pereira.
 The original K+S code was developed by Andrea Roventini, Mauro Napoletano, Tania Treibich, and Marcelo Pereira.

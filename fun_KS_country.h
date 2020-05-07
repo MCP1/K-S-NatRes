@@ -293,7 +293,7 @@ if ( COUNT( "Capital" ) > 1 || COUNT( "Consumption" ) > 1 ||
 }
 
 // ensure initial number of firms and banks is consistent
-if ( VS( cur1, "F1min" ) < 1 || VS( cur2, "F2min" ) < 1 ||  VS( cur3, "B" ) < 1 ||
+if ( VS( cur1, "F1min" ) < 1 || VS( cur2, "F2min" ) < 1 || VS( cur3, "B" ) < 1 ||
 	 VS( cur1, "F1max" ) < VS( cur1, "F1min" ) || 
 	 VS( cur2, "F2max" ) < VS( cur2, "F2min" ) )
 {
@@ -303,6 +303,7 @@ if ( VS( cur1, "F1min" ) < 1 || VS( cur2, "F2min" ) < 1 ||  VS( cur3, "B" ) < 1 
 
 WRITES( cur1, "F10", min( max( VS( cur1, "F10" ), VS( cur1, "F1min" ) ), 
 						  VS( cur1, "F1max" ) ) );
+WRITES( cur1, "F1p", min( max( VS( cur1, "F1p" ), 0 ), VS( cur1, "F10" ) ) );
 WRITES( cur2, "F20", min( max( VS( cur2, "F20" ), VS( cur2, "F2min" ) ), 
 						  VS( cur2, "F2max" ) ) );
 						  
@@ -321,6 +322,7 @@ double tauB = VS( cur3, "tauB" );				// capital adequacy rate
 double w0min = VS( cur4, "w0min" );				// absolute/initial minimum wage
 int B = VS( cur3, "B" );						// number of banks
 int F10 = VS( cur1, "F10" );					// initial firms in sector 1
+int F1p = VS( cur1, "F1p" );					// number of public firms in sector 1
 int F20 = VS( cur2, "F20" );					// initial firms in sector 2
 int F2max = VS( cur2, "F2max" );				// max firms in sector 2
 int Ls0 = VS( cur4, "Ls0" );					// initial labor supply
@@ -341,8 +343,6 @@ WRITES( cur2, "lastID2", 0 );
 // initialize lagged variables depending on parameters
 WRITEL( "G", G0, -1 );
 WRITELS( cur1, "F1", F10, -1 );
-// ADD NUMBER OF PUBLIC FIRMS
-
 WRITELS( cur1, "PPI", p10, -1 );
 WRITELS( cur1, "PPI0", p10, -1 );
 WRITELS( cur2, "CPI", p20, -1 );
@@ -383,7 +383,7 @@ DELETE( cur );
 cur = SEARCHS( cur2, "Firm2" );					// remove empty firm instance
 DELETE( cur );
 
-v[1] = entry_firm1( cur1, F10, true );			// add capital-good firms
+v[1] = entry_firm1( cur1, F10, F1p, true );		// add capital-good firms
 v[1] += entry_firm2( cur2, F20, true );			// add consumer-good firms
 
 WRITE( "cEntry", v[1] );						// save equity cost of entry

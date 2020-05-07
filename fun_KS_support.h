@@ -78,25 +78,6 @@ void update_debt1( object *firm, double desired, double loan )
 		WRITES( bank, "_TC1free", max( TC1free - loan, 0 ) );
 }
 
-// update public firm debt in equation 'Q1p', '_Tax1p'
-
-void update_debt1p( object *firm, double desired, double loan )
-{
-	INCRS( firm, "_Deb1p", loan );				// increment firm's debt stock
-
-	if ( loan > 0 && desired > loan )			// ignore loan repayment
-		INCRS( firm, "_cred1cp", desired - loan );// credit constraint
-	
-	object *bank = HOOKS( firm, BANK );			// firm's bank
-	double TC1free = VS( bank, "_TC1freep" );	// available credit firm's bank
-
-	// if credit limit active, adjust bank's available credit
-	if ( TC1free > -0.1 )
-		WRITES( bank, "_TC1freep", max( TC1free - loan, 0 ) );
-}
-
-// UPDATE DEBT FOR PUBLIC FIRM
-
 
 // update firm debt in equations '_Q2', '_EI', '_SI', '_Tax2'
 
@@ -214,7 +195,7 @@ double scrap_vintage( object *vint )
 // add and configure entrant capital-good firm object(s) and required hooks 
 // in equations 'entry1exit' and 'initCountry'
 
-double entry_firm1( object *sector, int n, bool newInd )
+double entry_firm1( object *sector, int n, int np, bool newInd )
 {
 	double Atau, AtauMax, Btau, BtauMax, D10, NW1, NW10, RD0, c1, f1, p1, mult, 
 		   equity = 0;
@@ -259,7 +240,7 @@ double entry_firm1( object *sector, int n, bool newInd )
 	}
 	
 	// add entrant firms (end of period, don't try to sell)
-	for ( ; n > 0; --n )
+	for ( ; n > 0; --n, --np )
 	{
 		ID1 = INCRS( sector, "lastID1", 1 );	// new firm ID
 		
@@ -304,6 +285,7 @@ double entry_firm1( object *sector, int n, bool newInd )
 
 		// initialize variables
 		WRITES( firm, "_ID1", ID1 );
+		WRITES( firm, "_public1", np > 0 ? 1 : 0 );
 		WRITES( firm, "_t1ent", T );
 		
 		if ( newInd )
@@ -335,8 +317,6 @@ double entry_firm1( object *sector, int n, bool newInd )
 	
 	return equity;								// equity cost of entry(ies)
 }
-
-// DO IT FOR PUBLIC FIRM
 
 
 // add and configure entrant consumer-good firm object(s) and required hooks 
@@ -552,9 +532,6 @@ double exit_firm1( object *firm )
 	
 	return max( liqVal, 0 );					// liquidation credit, if any
 }
-
-// DO IT FOR THE PUBLIC FIRM
-
 
 
 // remove consumer-good firm object and exiting hooks in equation 'entry2exit'
