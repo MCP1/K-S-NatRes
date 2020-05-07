@@ -39,6 +39,7 @@ struct country
 };
 
 
+//What does a HOOK do?
 /*========================= HOOK-RELATED DEFINITIONS =========================*/
 
 // number of dynamic hooks per object type

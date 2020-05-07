@@ -37,7 +37,7 @@ else
 	v[6] = 1;									// no shortage
 
 RESULT( v[2] + ( v[3] - v[2] ) * v[6] )
-
+// ISNT IT V[1]-V[2]?
 
 EQUATION( "MC1" )
 /*

@@ -1,0 +1,130 @@
+/******************************************************************************
+
+	FIRM1 OBJECT EQUATIONS
+	----------------------
+
+	Equations that are specific to the Firm1 objects in the K+S LSD model 
+	are coded below.
+ 
+ ******************************************************************************/
+
+/*============================== KEY EQUATIONS ===============================*/
+
+EQUATION("_teste2")
+v[0]=3;
+RESULT( v[0] )
+
+EQUATION( "_Ataup" )
+/*
+Productivity of the new vintage of machines when employed for production.
+Also updates '_Btau'.
+*/
+
+double Btau = VL( "_Btaup", 1 );					// previous period productivity
+double xi = VS( PARENT, "xi" );					// share of R&D for innovation
+
+// normalized workers on R&D of the firm
+double L1rdN = VL( "_L1rdp", 1 ) * VS( LABSUPL2, "Ls0" ) / VLS( LABSUPL2, "Ls", 1 );
+
+// innovation process (success probability)
+v[1] = 1 - exp( - VS( PARENT, "zeta1" ) * xi * L1rdN );
+
+if ( bernoulli( v[1] ) )						// innovation succeeded?
+{
+	double x1inf = VS( PARENT, "x1inf" );		// lower beta inno. draw support 
+	double x1sup = VS( PARENT, "x1sup" );		// upper beta inno. draw support 
+	double alpha1 = VS( PARENT, "alpha1" );		// beta distrib. alpha parameter
+	double beta1 = VS( PARENT, "beta1" );		// beta distrib. beta parameter
+	
+	// new final productivity (A) from innovation
+	v[2] = CURRENT * ( 1 + x1inf + beta( alpha1, beta1 ) * ( x1sup - x1inf ) );
+	
+	// new production productivity (B) from innovation
+	v[3] = Btau * ( 1 + x1inf + beta( alpha1, beta1 ) * ( x1sup - x1inf ) );
+}
+else
+	v[2] = v[3] = 0;							// innovation failure
+
+// imitation process (success probability)
+v[4] = 1 - exp( - VS( PARENT, "zeta2" ) * ( 1 - xi ) * L1rdN ); 
+
+// select best option between the three options (current/innovation/imitation)
+v[0] = CURRENT;									// current technology
+v[10] = Btau;
+v[11] = v[12] = 0;
+
+if ( v[2] * v[3] > v[0] * v[10] )				// is innovation better?
+{
+	v[0] = v[2];								// new Atau
+	v[10] = v[3];								// new Btau
+	v[11] = 1;									// innovation succeeded
+	v[12] = 0;									// no imitation
+}
+
+if ( v[8] * v[9] > v[0] * v[10] )				// is imitation better (yet)?
+{
+	v[0] = v[8];
+	v[10] = v[9];
+	v[11] = 0;									// no innovation
+	v[12] = 1;									// imitation succeeded
+}
+
+WRITE( "_Btaup", v[10] );
+WRITE( "_innp", v[11] );
+WRITE( "_imip", v[12] );
+
+RESULT( v[0] )
+
+EQUATION( "_L1rdp" )
+/*
+R&D labor employed by firm in capital-good sector
+*/
+RESULT( V( "_L1dRDp" ) * VS( PARENT, "L1rd" ) / VS( PARENT, "L1dRD" ) )
+
+EQUATION( "_L1dRDp" )
+/*
+R&D labor demand of firm in capital-good sector
+*/
+RESULT( V( "_RDp" ) / VS( LABSUPL2, "w" ) )
+
+
+EQUATION( "_RDp" )
+/*
+R&D expenditure of firm in capital-good sector
+*/
+
+v[1] = VL( "_S1p", 1 );							// sales in previous period
+v[2] = VS( PARENT, "nu" );						// R&D share of sales
+
+if ( v[1] > 0 )
+	v[0] = v[2] * v[1];
+else											// no sales
+	// keep current expenditure or a share of available cash
+	v[0] = CURRENT;
+	
+RESULT( v[0] )
+
+EQUATION( "_S1p" )
+/*
+Sales of firm in capital-good sector
+*/
+v[0] = 0.5
+RESULT( v[0] )
+
+EQUATION_DUMMY( "_imip", "" )
+/*
+Imitation success (1) or failure (0) for firm in capital-good sector
+Updated in '_Atau'
+*/
+
+EQUATION_DUMMY( "_innp", "" )
+/*
+Innovation success (1) or failure (0) for firm in capital-good sector
+Updated in '_Atau'
+*/
+
+EQUATION_DUMMY( "_Btaup", "" )
+/*
+Productivity of labor in producing the new vintage of machines
+Updated in '_Atau'
+*/

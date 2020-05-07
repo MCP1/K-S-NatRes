@@ -18,6 +18,8 @@ flagAddWorkers is set to 1
 
 v[1] = V( "delta" );							// population growth rate
 
+
+//******************** I HAVE TO ADD THE LABOR OF PUBLIC FIRM L1dp************************//
 // growing workforce and demand is higher than labor supply?
 if ( VS( PARENT, "flagAddWorkers" ) == 1 && 
 	 VS( CAPSECL1, "L1d" ) + VS( CONSECL1, "L2d" ) > CURRENT )

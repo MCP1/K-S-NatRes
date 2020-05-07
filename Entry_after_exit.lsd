@@ -154,6 +154,15 @@ Label Root
 
 			}
 
+			Son: Firm1p
+			Label Firm1p
+			{
+				Var: _teste2
+				Var: _Ataup
+				Var: _Btaup
+
+			}
+
 			Param: Deb10ratio
 			Param: F10
 			Param: F1max
@@ -616,7 +625,7 @@ Param: F10 0 n + n n	50
 Param: F1max 0 n + n n	50
 Param: F1min 0 n + n n	50
 Param: L1rdMax 0 n + n n	0.2
-Param: L1shortMax 0 n + n n	1
+Param: L1shortMax 0 n + n n	0.2
 Param: NW10 0 n + n n	10000
 Param: PPI0 0 n + n n	0
 Param: Phi3 0 n + n n	0.1
@@ -706,6 +715,11 @@ Param: _nCan 0 n + n n	0
 Param: _nOrd 0 n + n n	0
 Param: _tOrd 0 n + n n	0
 Param: _tSel 0 n + n n	0
+
+Object: Firm1p C	1
+Var: _teste2 0 s + n n
+Var: _Ataup 1 s + n n	1
+Var: _Btaup 1 s + n n	1
 
 Object: Consumption C	1
 Param: Deb20ratio 0 n + n n	1
@@ -921,7 +935,7 @@ Var: wReal 0 s + n n
 
 SIM_NUM 1
 SEED 1
-MAX_STEP 500
+MAX_STEP 100
 EQUATION fun_KS.cpp
 MODELREPORT modelreport.html
 
@@ -1682,7 +1696,7 @@ Parameter_L1shortMax
 Maximum labor shortage allowed in capital-good sector
 (0, 1)
 _INIT_
-All 1 instances equal to 1.
+All 1 instances equal to 0.2.
 END_DESCRIPTION
 
 Parameter_NW10
@@ -2231,6 +2245,34 @@ Parameter__tSel
 Last time firm was selected by client firm
 _INIT_
 All 20 instances equal to 0.
+END_DESCRIPTION
+
+Object_Firm1p
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Variable__teste2
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Variable__Ataup
+(no description available)
+
+_INIT_
+
+
+END_DESCRIPTION
+
+Variable__Btaup
+(no description available)
+
+_INIT_
+
+
 END_DESCRIPTION
 
 Object_Consumption

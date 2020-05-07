@@ -56,6 +56,25 @@ else
 
 RESULT( v[0] )
 
+//
+EQUATION( "_TC1freep" )
+/*
+Minimum bank total credit supply to firms in sector 1
+Updated in 'update_debt1' support function
+*/
+
+if ( VS( GRANDPARENT, "flagCreditRule" ) == 1 )
+{
+	v[1] = VS( CAPSECL2, "F1p" );				// # firms in sector 1
+
+	v[2] = v[1] / ( v[1] + VS( CONSECL2, "F2" ) );// credit allocation for s. 1
+	v[0] = v[2] * max( 0, V( "_TC" ) - VL( "_Loans", 1 ) );// free cash to lend
+}
+else
+	v[0] = -1;									// no limit
+
+RESULT( v[0] )
+
 
 EQUATION( "_TC2free" )
 /*

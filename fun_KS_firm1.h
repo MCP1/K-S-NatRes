@@ -115,7 +115,6 @@ WRITE( "_imi", v[12] );
 
 RESULT( v[0] )
 
-
 EQUATION( "_Deb1max" )
 /*
 Prudential maximum bank debt of firm in capital-good sector

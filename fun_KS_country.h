@@ -341,6 +341,8 @@ WRITES( cur2, "lastID2", 0 );
 // initialize lagged variables depending on parameters
 WRITEL( "G", G0, -1 );
 WRITELS( cur1, "F1", F10, -1 );
+// ADD NUMBER OF PUBLIC FIRMS
+
 WRITELS( cur1, "PPI", p10, -1 );
 WRITELS( cur1, "PPI0", p10, -1 );
 WRITELS( cur2, "CPI", p20, -1 );

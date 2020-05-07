@@ -42,6 +42,9 @@ MODELBEGIN
 #include "fun_KS_bank.h"						// Bank objects equations
 #include "fun_KS_capital.h"						// Capital object equations
 #include "fun_KS_firm1.h"						// Firm1 objects equations
+
+#include "fun_KS_firm1p.h"						// Firm1 public objects equations
+
 #include "fun_KS_consumption.h"					// Consumption object equations
 #include "fun_KS_firm2.h"						// Firm2 objects equations
 #include "fun_KS_vintage.h"						// Vint objects equations
