@@ -3,8 +3,6 @@ K+S Model with National Research Labs (version 0.3.1)
 This version copyright by Marcelo C. Pereira.
 The original K+S code was developed by Andrea Roventini, Mauro Napoletano, Tania Treibich, and Marcelo Pereira.
 
-Expansion by Danilo Spinola
-
 This is a full rewrite of the original "Schumpeter meeting Keynes" (K+S) model, plus the finance extensions and a variable number of firms in both sectors. Differently from original versions, the entire the model was recoded into regular LSD equations. There is no guarantee this version matches the results of original version exactly, due to intrinsic differences between programming approaches.
 
 
