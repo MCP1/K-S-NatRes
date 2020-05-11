@@ -3,12 +3,14 @@
 	CAPITAL-GOODS MARKET OBJECT EQUATIONS
 	-------------------------------------
 
-	Equations that are specific to the capital-goods market objects in the 
+	Equations that are specific to the capital-goods market objects in the
 	K+S LSD model are coded below.
- 
+
  ******************************************************************************/
 
 /*============================== KEY EQUATIONS ===============================*/
+
+//Teste de como usar o git
 
 EQUATION( "L1" )
 /*
@@ -29,7 +31,7 @@ v[4] = min( v[4], v[1] );
 if ( v[1] - v[2] < v[3] + v[4] )				// labor shortage?
 {
 	v[6] = ( v[1] - v[2] ) / ( v[3] + v[4] );	// shortage factor
-	
+
 	if ( v[6] < 1 - v[5] )						// over cap?
 		v[6] = 1 - v[5];						// shortage on cap
 }
@@ -37,7 +39,7 @@ else
 	v[6] = 1;									// no shortage
 
 RESULT( v[2] + ( v[3] - v[2] ) * v[6] )
-// ISNT IT V[1]-V[2]? 
+// ISNT IT V[1]-V[2]?
 // No, v[1] (Ls) is the total supply and v[2] (L1rd) is just the R&D people in sector 1
 
 
@@ -79,7 +81,7 @@ v[1] = v[2] = v[3] = i = k = 0;					// accum., counters, registers
 CYCLE( cur, "Firm1" )
 {
 	v[4] = VS( cur, "_NW1" );					// current net wealth
-	
+
 	if ( VS( cur, "_public1" ) )				// public firms don't exit
 	{
 		if ( v[4] < 0 )							// provide more equity if needed
@@ -87,7 +89,7 @@ CYCLE( cur, "Firm1" )
 			// new equity required
 			v[6] = NW10u + VS( cur, "_Deb1" ) - VS( cur, "_NW1" );
 			v[1] += v[6];						// accumulate "entry" equity cost
-			
+
 			WRITES( cur, "_Deb1", 0 );			// reset debt
 			INCRS( cur, "_NW1", v[6] );			// add new equity
 		}
@@ -97,12 +99,12 @@ CYCLE( cur, "Firm1" )
 		{
 			for ( v[5] = j = 0; j < n1; ++j )
 				v[5] += VLS( cur, "_BC", j );	// n1 periods customer number
-			
+
 			if ( v[4] < 0 || v[5] <= 0 )
 			{
 				quit[ i ] = true;				// mark for likely exit
 				--h;							// one less firm
-				
+
 				if ( v[5] > v[3] )				// best firm so far?
 				{
 					k = i;						// save firm index
@@ -110,9 +112,9 @@ CYCLE( cur, "Firm1" )
 				}
 			}
 		}
-	
+
 	++i;
-}	
+}
 
 // quit candidate firms exit, except the best one if all going to quit
 i = j = 0;										// firm counters
@@ -132,7 +134,7 @@ CYCLE_SAFE( cur, "Firm1" )
 				// new equity required
 				v[6] = NW10u + VS( cur, "_Deb1" ) - VS( cur, "_NW1" );
 				v[1] += v[6];					// accumulate "entry" equity cost
-				
+
 				WRITES( cur, "_Deb1", 0 );		// reset debt
 				INCRS( cur, "_NW1", v[6] );		// add new equity
 			}
@@ -146,9 +148,9 @@ V( "f1rescale" );								// redistribute exiting m.s.
 // compute the potential number of entrants
 v[7] = ( MC1_1 == 0 ) ? 0 : MC1 / MC1_1 - 1;// change in market conditions
 
-k = max( 0, ceil( F1 * ( ( 1 - omicron ) * uniform( x2inf, x2sup ) + 
+k = max( 0, ceil( F1 * ( ( 1 - omicron ) * uniform( x2inf, x2sup ) +
 						 omicron * min( max( v[7], x2inf ), x2sup ) ) ) );
-				 
+
 // apply return-to-the-average stickiness random shock to the number of entrants
 k -= min( RND * stick * ( ( double ) ( F1 - j ) / F10 - 1 ) * F10, k );
 
@@ -344,7 +346,7 @@ if ( v[1] > 0 )									// production ok?
 else
 {
 	v[2] = 1 / COUNT( "Firm1" );				// firm fair share
-	
+
 	CYCLE( cur, "Firm1" )						// rescale to add-up to 1
 	{
 		v[0] += v[2];
