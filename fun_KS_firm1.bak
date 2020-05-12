@@ -559,6 +559,11 @@ Stock of bank debt of firm in capital-good sector
 Updated in '_Q1', '_Tax1'
 */
 
+EQUATION_DUMMY( "_pubpriv", "" )
+/*
+Check which firms are public and which are private. Just for consistency.
+*/
+
 EQUATION_DUMMY( "_Div1", "" )
 /*
 Dividends paid by firm in capital-good sector
