@@ -153,6 +153,7 @@ Label Root
 				Var: _p1
 				Var: _qc1
 				Param: _Test
+				Var: _pubpriv
 
 			}
 
@@ -705,6 +706,7 @@ Var: _inn 0 n + n n
 Var: _p1 0 n + n n
 Var: _qc1 1 n + n n	0
 Param: _Test 0 s + n n	0
+Var: _pubpriv 0 s + n n
 
 Object: Cli C	1
 Param: _IDc 0 n + n n	0
@@ -2218,9 +2220,12 @@ END_DESCRIPTION
 
 Parameter__Test
 (no description available)
-
 _INIT_
 
+END_DESCRIPTION
+
+Variable__pubpriv
+(no description available)
 END_DESCRIPTION
 
 Object_Cli

@@ -209,6 +209,8 @@ Label Root
 			Var: exit1
 			Var: imi
 			Var: inn
+			Var: RD_ES
+			Param: xi_ES
 
 		}
 
@@ -667,6 +669,8 @@ Var: entry1exit 0 n + n n
 Var: exit1 0 s + n n
 Var: imi 0 s + n n
 Var: inn 0 s + n n
+Var: RD_ES 0 s + n n
+Param: xi_ES 0 n + n n	0.0001
 
 Object: Firm1 C	1
 Param: _ID1 0 n + n n	0
@@ -1991,6 +1995,18 @@ END_DESCRIPTION
 Variable_inn
 Number of firms that successfully innovate in capital-good sector
 _INIT_
+
+END_DESCRIPTION
+
+Variable_RD_ES
+(no description available)
+END_DESCRIPTION
+
+Parameter_xi_ES
+(no description available)
+
+_INIT_
+
 
 END_DESCRIPTION
 
