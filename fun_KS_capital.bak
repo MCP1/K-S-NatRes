@@ -376,8 +376,6 @@ Rate of bankrupt firms in capital-good sector
 Updated in 'entry1exit'
 */
 
-
-
 //////////////////////
 /* 
 IMPLEMENTATION OF THE PUBLIC FIRM - SPECIAL RULES.
@@ -415,8 +413,6 @@ if (flag_entr_state==4)
 			RD(1,1)=nu_state*S1(1,1);
 		}
 
-
-
 //////////////////
 EXPERIMENT 5:NATIONAL RESEARCH LAB
 The NRL increase technological opportunities, doing radical innovations. It is not a public firm itself, it has a different dynamics.
@@ -433,38 +429,54 @@ First is to implement a public capital-good firm, capable of freely diffusing kn
 Second objective is a National Research Lab, that is not a firm on the same sense as the public and private ones. It is mainly a public funded laboratory that increase tecnology opportunities (change x1inf and x1sup)
 */
 
-/* 
+
+
 EQUATION( "RD_ES" ) //R&D used for radical innovations.
 v[0]= V("xi_ES"); // xi parameter for the NRL 
 v[1]= VS( PARENT, "GDP" ); //GDP
 v[2]=v[0]*v[1]; // Invest part of the GDP in the NRL
 RESULT(v[2])
 
-/*
-EQUATION( "x1inf" ) //radical innovation - increase technological opportunities (also updates x1sup)
-v[0]=V("RD_ES"); 
+
+
+
+EQUATION( "x1infNRL" ) //radical innovation - increase technological opportunities (also updates x1sup)
+
+v[0] = V("RD_ES"); 
+
 v[1] = 1 - exp( - V("zeta_ES") * v[0] ); //Zeta_ES is the Zeta for radical innovations. v[1] is the bernoulli parameter
 
-if ( bernoulli( v[1] ) )						// radical innovation succeeded?
+
+if ( bernoulli( v[1] )==1 )						// radical innovation succeeded?
 {
 	double alpha1_ES = V("alpha1_ES");		// beta distrib. alpha parameter for radical innovations
 	double beta1_ES = V("beta1_ES");		// beta distrib. beta parameter for radical innovations
-	v[2]=beta( alpha1_ES, beta1_ES ); // Parameter of Technological Opportunities
 	double x1inf_ES = V("x1inf_ES");		// lower beta inno. draw support for radical innovations
 	double x1sup_ES = V("x1sup_ES");		// upper beta inno. draw support for radical innovations
-	v[3]= (x1inf_ES + v[2] * ( x1sup_ES - x1inf_ES ) ); //New value for Technological Opportunities
 	
-	v[4]= CURRENT*(1+v[3]/2);
-  v[5]= V("x1inf")*(1+v[3]/2);
+	v[2]=beta(alpha1_ES, beta1_ES ); // Parameter of Technological Opportunities
+	v[3]= x1inf_ES + v[2] * ( x1sup_ES - x1inf_ES  ); //New value for Technological Opportunities
+}
+ 	
+ 	 double x1supNRL = V("x1supNRL");
+ 	v[4]= CURRENT * (1+v[3]/2); //MULTIPLICATION IS NOT WORKING HERE
+ 	v[5]= x1supNRL * (1+v[3]/2); //MULTIPLICATION IS NOT WORKING HERE
+ 
+
+  //v[5]= V("x1sup")*(1+v[3]/2);
 	
-	WRITE( "x1sup", v[5] );
+	WRITE("x1supNRL", v[5] );
+
 RESULT( v[4] )
-*/
 
+
+
+EQUATION_DUMMY( "x1supNRL", "" )
 /* 
-/////////////////////
-EXPERIMENTS 1 AND 2 BY FRANCESCO
 
+/////////////////////
+//EXPERIMENTS 1 AND 2 BY FRANCESCO
+/*
 EXPERIMENT 1: Include subsidy to R&D Activities. In this experiment Francesco adds an α subsidy to spendings in RD: RD_sub=RD*(1+α).
 In Francesco’s code:
 flag_entr_state == 1

@@ -209,6 +209,14 @@ Label Root
 			Var: exit1
 			Var: imi
 			Var: inn
+			Var: RD_ES
+			Param: xi_ES
+			Param: zeta_ES
+			Var: x1infNRL
+			Param: alpha1_ES
+			Param: beta1_ES
+			Param: x1inf_ES
+			Param: x1sup_ES
 
 		}
 
@@ -636,7 +644,7 @@ Param: m1 0 n + n n	0.1
 Param: mu1 0 n + n n	0.04
 Param: n1 0 n + n n	4
 Param: nu 0 n + n n	0.04
-Param: x1inf 0 n + n n	-0.15
+Param: x1inf 1 s + n n	-0.15
 Param: x1sup 0 n + n n	0.15
 Param: x5 0 n + n n	0.3
 Param: xi 0 n + n n	0.5
@@ -667,6 +675,14 @@ Var: entry1exit 0 n + n n
 Var: exit1 0 s + n n
 Var: imi 0 s + n n
 Var: inn 0 s + n n
+Var: RD_ES 0 s + n n
+Param: xi_ES 0 n + n n	0.0001
+Param: zeta_ES 0 n + n n	0.01
+Var: x1infNRL 1 s + d n	1
+Param: alpha1_ES 0 n + n n	3
+Param: beta1_ES 0 n + n n	3
+Param: x1inf_ES 0 n + n n	0.15
+Param: x1sup_ES 0 n + n n	0.15
 
 Object: Firm1 C	1
 Param: _ID1 0 n + n n	0
@@ -1990,6 +2006,54 @@ END_DESCRIPTION
 
 Variable_inn
 Number of firms that successfully innovate in capital-good sector
+_INIT_
+
+END_DESCRIPTION
+
+Variable_RD_ES
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_xi_ES
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_zeta_ES
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Variable_x1infNRL
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_alpha1_ES
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_beta1_ES
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_x1inf_ES
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_x1sup_ES
+(no description available)
 _INIT_
 
 END_DESCRIPTION

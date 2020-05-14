@@ -15,7 +15,7 @@ EQUATION( "_Atau" )
 Productivity of the new vintage of machines when employed for production.
 Also updates '_Btau'.
 */
-
+//double distPub = VS(PARENT, "distPub")
 double Btau = VL( "_Btau", 1 );					// previous period productivity
 double xi = VS( PARENT, "xi" );					// share of R&D for innovation
 
@@ -50,15 +50,22 @@ if ( bernoulli( v[4] ) )						// imitation succeeded?
 	dblVecT imiProb( k );						// vector for tech distance
 	
 	v[5] = i = 0;								// inverse distance/firm accum.
+	
 	CYCLES( PARENT, cur, "Firm1" )				// 1st run: abs. inv. distance
 		if ( cur == p )
 			imiProb[ i++ ] = 0;					// can't self-imitate
 		else
 		{
+		// If not public =
 			v[6] = sqrt( pow( VLS( cur, "_Btau", 1 ) - Btau, 2 ) +
 						 pow( VLS( cur, "_Atau", 1 ) - CURRENT, 2 ) );
+			// else
+		 	// v[6]=distPub
 			v[5] += imiProb[ i++ ] = ( v[6] > 0 ) ? 1 / v[6] : 0;
 		}
+		
+	// else
+		//
 
 	if ( v[5] > 0 )
 	{
