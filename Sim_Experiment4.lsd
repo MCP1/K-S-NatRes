@@ -683,7 +683,7 @@ Var: imi 0 s + n n
 Var: inn 0 s + n n
 Var: RD_ES 0 s + n n
 Param: xi_ES 0 n + n n	0.0001
-Param: zeta_ES 0 n + n n	0
+Param: zeta_ES 0 n + n n	0.0005
 Var: x1infNRL 1 s + d n	-0.15
 Param: alpha1_ES 0 n + n n	3
 Param: beta1_ES 0 n + n n	3

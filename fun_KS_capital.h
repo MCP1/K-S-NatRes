@@ -175,6 +175,40 @@ INIT_TSEARCHT( "Firm1", i );					// prepare turbo search indexing
 RESULT( v[0] )
 
 
+// Firms that have the maximun investment in RD. This will be used by the public firm.
+// Experiment 3 - calculate the maximun R&D done by private firms each round. The public firm will match the same R&D as the private firm with higher R&D
+
+
+EQUATION ("maxRD")
+v[0]=0;
+CYCLE( cur, "Firm1" )
+{
+		if (v[0]<VS( cur, "_RD" ))
+		v[0]=VS( cur, "_RD" );
+}
+
+CYCLE( cur, "Firm1" )
+{
+	if( VS( cur, "_public1" ) )
+	WRITES(cur, "_RD", v[0] ); //Public Firm invest in R&D as the top invester
+}
+v[1]=v[0];
+v[0]=0;
+RESULT( v[1] )
+
+/*
+EQUATION ("pubRD")
+v[1]=V("maxRD");
+CYCLE( cur, "Firm1" )
+{ v[0]=0;
+	if ( VS( cur, "_public1" ) )	
+	{
+		v[0]=1;
+	}
+}	
+RESULT( v[0] )
+*/
+
 /*============================ SUPPORT EQUATIONS =============================*/
 
 EQUATION( "A1" )
@@ -375,7 +409,7 @@ EQUATION_DUMMY( "exit1fail", "entry1exit" )
 Rate of bankrupt firms in capital-good sector
 Updated in 'entry1exit'
 */
-
+//EQUATION_DUMMY( "maxRD", "" )
 //////////////////////
 /* 
 IMPLEMENTATION OF THE PUBLIC FIRM - SPECIAL RULES.
@@ -430,26 +464,21 @@ Second objective is a National Research Lab, that is not a firm on the same sens
 */
 
 
-
+/////////// EXPERIMENT 4: NATIONAL RESEARCH LAB ////////////////////
 EQUATION( "RD_ES" ) //R&D used for radical innovations.
 v[0]= V("xi_ES"); // xi parameter for the NRL 
 v[1]= VS( PARENT, "GDP" ); //GDP
 v[2]=v[0]*v[1]; // Invest part of the GDP in the NRL
 RESULT(v[2])
 
-
-
-
 EQUATION( "x1infNRL" ) //radical innovation - increase technological opportunities (also updates x1sup)
 
 v[0] = V("RD_ES"); 
-
 v[1] = 1 - exp( - V("zeta_ES") * v[0] ); //Zeta_ES is the Zeta for radical innovations. v[1] is the bernoulli parameter
-
 
 if ( bernoulli( v[1] )==1 )						// radical innovation succeeded?
 {
-	double alpha1_ES = V("alpha1_ES");		// beta distrib. alpha parameter for radical innovations
+	double alpha1_ES = V("alpha1_ES");	// beta distrib. alpha parameter for radical innovations
 	double beta1_ES = V("beta1_ES");		// beta distrib. beta parameter for radical innovations
 	double x1inf_ES = V("x1inf_ES");		// lower beta inno. draw support for radical innovations
 	double x1sup_ES = V("x1sup_ES");		// upper beta inno. draw support for radical innovations
@@ -459,10 +488,9 @@ if ( bernoulli( v[1] )==1 )						// radical innovation succeeded?
 }
  	
  	 double x1supNRL = V("x1supNRL");
- 	v[4]= CURRENT * (1+v[3]/2); //MULTIPLICATION IS NOT WORKING HERE
- 	v[5]= x1supNRL * (1+v[3]/2); //MULTIPLICATION IS NOT WORKING HERE
-  //v[5]= V("x1sup")*(1+v[3]/2);
-	WRITE("x1supNRL", v[5] );
+ 	v[4]= CURRENT + (v[3]/2); 
+ 	v[5]= x1supNRL + (v[3]/2); 
+ 	WRITE("x1supNRL", v[5] );
 RESULT( v[4] )
 
 EQUATION_DUMMY( "x1supNRL", "" )

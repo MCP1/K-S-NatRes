@@ -15,7 +15,7 @@ EQUATION( "_Atau" )
 Productivity of the new vintage of machines when employed for production.
 Also updates '_Btau'.
 */
-
+//double distPub = VS(PARENT, "distPub")
 double Btau = VL( "_Btau", 1 );					// previous period productivity
 double xi = VS( PARENT, "xi" );					// share of R&D for innovation
 
@@ -23,12 +23,14 @@ double xi = VS( PARENT, "xi" );					// share of R&D for innovation
 double L1rdN = VL( "_L1rd", 1 ) * VS( LABSUPL2, "Ls0" ) / VLS( LABSUPL2, "Ls", 1 );
 
 // innovation process (success probability)
-v[1] = 1 - exp( - VS( PARENT, "zeta1" ) * xi * L1rdN );
+//Experiment 1: 
+v[1] = 1 - exp( - VS( PARENT, "zeta1" ) * xi * L1rdN * (1+VS( PARENT, "L1rdSub")));
+// Extra subsidy: xi*(1+L1rdSub)*L1rdN - This is an extra cost of the government that needs to be considered as public deficit
 
 if ( bernoulli( v[1] ) )						// innovation succeeded?
 {
-	double x1inf = VS( PARENT, "x1inf" );		// lower beta inno. draw support 
-	double x1sup = VS( PARENT, "x1sup" );		// upper beta inno. draw support 
+	double x1inf = VS( PARENT, "x1infNRL" );		// lower beta inno. draw support 
+	double x1sup = VS( PARENT, "x1supNRL" );		// upper beta inno. draw support 
 	double alpha1 = VS( PARENT, "alpha1" );		// beta distrib. alpha parameter
 	double beta1 = VS( PARENT, "beta1" );		// beta distrib. beta parameter
 	
@@ -50,15 +52,24 @@ if ( bernoulli( v[4] ) )						// imitation succeeded?
 	dblVecT imiProb( k );						// vector for tech distance
 	
 	v[5] = i = 0;								// inverse distance/firm accum.
+	
 	CYCLES( PARENT, cur, "Firm1" )				// 1st run: abs. inv. distance
 		if ( cur == p )
 			imiProb[ i++ ] = 0;					// can't self-imitate
 		else
 		{
+		// EXPERIMENT 3 - PUBLIC FIRMS EXPANDING TECHNOLOGICAL DISTANCE
 			v[6] = sqrt( pow( VLS( cur, "_Btau", 1 ) - Btau, 2 ) +
 						 pow( VLS( cur, "_Atau", 1 ) - CURRENT, 2 ) );
+			if (V("_public1")==1) 
+						// Public firm can expand the technological distance to allow for immitation
+						v[6]=(1+VS(PARENT, "pubTechDist"))*sqrt( pow( VLS( cur, "_Btau", 1 ) - Btau, 2 ) + pow( VLS( cur, "_Atau", 1 ) - CURRENT, 2 ) );
+			
 			v[5] += imiProb[ i++ ] = ( v[6] > 0 ) ? 1 / v[6] : 0;
 		}
+		
+	// else
+		//
 
 	if ( v[5] > 0 )
 	{
@@ -254,7 +265,8 @@ EQUATION( "_RD" )
 /*
 R&D expenditure of firm in capital-good sector
 */
-
+//Experiment 3
+if (V("_public1")==0) {  //The private firms follow the same rules as in the previous version, the public will invest as top invester (see equation maxRD in capital.h)
 v[1] = VL( "_S1", 1 );							// sales in previous period
 v[2] = VS( PARENT, "nu" );						// R&D share of sales
 
@@ -263,7 +275,7 @@ if ( v[1] > 0 )
 else											// no sales
 	// keep current expenditure or a share of available cash
 	v[0] = CURRENT;
-	
+}
 RESULT( v[0] )
 
 
@@ -559,11 +571,6 @@ Stock of bank debt of firm in capital-good sector
 Updated in '_Q1', '_Tax1'
 */
 
-EQUATION_DUMMY( "_pubpriv", "" )
-/*
-Check which firms are public and which are private. Just for consistency.
-*/
-
 EQUATION_DUMMY( "_Div1", "" )
 /*
 Dividends paid by firm in capital-good sector
@@ -588,6 +595,7 @@ Imitation success (1) or failure (0) for firm in capital-good sector
 Updated in '_Atau'
 */
 
+
 EQUATION_DUMMY( "_inn", "" )
 /*
 Innovation success (1) or failure (0) for firm in capital-good sector
@@ -599,3 +607,6 @@ EQUATION_DUMMY( "_qc1", "cScores" )
 Credit class of firm in sector 1 (1,2,3,4)
 Updated in 'cScores'
 */
+
+EQUATION_DUMMY("_pubRD", "")
+

@@ -338,7 +338,6 @@ send_order( p, floor( v[0] / v[4] ) );			// send order to machine supplier
 
 RESULT( v[0] )
 
-
 EQUATION( "_Tax2" )
 /*
 Tax paid by firm in consumption-good sector
@@ -350,6 +349,7 @@ v[2] = VS( GRANDPARENT, "tr" );					// tax rate
 
 if ( v[1] > 0 )									// profits?
 {
+	
 	v[0] = v[1] * v[2];							// tax to government
 	v[4] = VS( PARENT, "d2" ) * ( v[1] - v[0] );// shareholders dividend 
 }
