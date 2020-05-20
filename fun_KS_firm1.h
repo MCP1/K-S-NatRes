@@ -15,22 +15,24 @@ EQUATION( "_Atau" )
 Productivity of the new vintage of machines when employed for production.
 Also updates '_Btau'.
 */
-//double distPub = VS(PARENT, "distPub")
+
 double Btau = VL( "_Btau", 1 );					// previous period productivity
 double xi = VS( PARENT, "xi" );					// share of R&D for innovation
 
 // normalized workers on R&D of the firm
 double L1rdN = VL( "_L1rd", 1 ) * VS( LABSUPL2, "Ls0" ) / VLS( LABSUPL2, "Ls", 1 );
 
-// innovation process (success probability)
-//EXPERIMENT 1: Add a public subsidy to R&D Spending. Addition of the variable L1rdSub 
+//////////////////////EXPERIMENT 1/////////////////////////////////
+//Add a public subsidy to R&D Spending. Addition of the variable L1rdSub 
 v[1] = 1 - exp( - VS( PARENT, "zeta1" ) * xi * L1rdN * (1+VS( PARENT, "L1rdSub")));
 // Extra subsidy: xi*(1+L1rdSub)*L1rdN - This is an extra cost of the government that needs to be considered as public deficit
 
 if ( bernoulli( v[1] ) )						// innovation succeeded?
 {
-	double x1inf = VLS( PARENT, "x1infNRL", 1 );		// lower beta inno. draw support 
-	double x1sup = VLS( PARENT, "x1supNRL", 1 );		// upper beta inno. draw support 
+
+// NOW AS PART OF EXPERIMENT 4, THE x1inf and x1sup will depend on the National Research Lab 
+	double x1inf = VLS( PARENT, "x1infNRL",1 );		// lower beta inno. draw support 
+	double x1sup = VLS( PARENT, "x1supNRL",1 );		// upper beta inno. draw support 
 	double alpha1 = VS( PARENT, "alpha1" );		// beta distrib. alpha parameter
 	double beta1 = VS( PARENT, "beta1" );		// beta distrib. beta parameter
 	
@@ -52,13 +54,11 @@ if ( bernoulli( v[4] ) )						// imitation succeeded?
 	dblVecT imiProb( k );						// vector for tech distance
 	
 	v[5] = i = 0;								// inverse distance/firm accum.
-	
 	CYCLES( PARENT, cur, "Firm1" )				// 1st run: abs. inv. distance
 		if ( cur == p )
 			imiProb[ i++ ] = 0;					// can't self-imitate
 		else
 		{
-	
 			v[6] = sqrt( pow( VLS( cur, "_Btau", 1 ) - Btau, 2 ) +
 						 pow( VLS( cur, "_Atau", 1 ) - CURRENT, 2 ) );
 /////////////  EXPERIMENT 3 ///////////////////////////
@@ -66,12 +66,9 @@ if ( bernoulli( v[4] ) )						// imitation succeeded?
 // Public firm can expand the technological distance to allow for immitation. However this does not change the final result.
 			if (V("_public1")==1) 
 						v[6]=(1+VS(PARENT, "pubTechDist"))*sqrt( pow( VLS( cur, "_Btau", 1 ) - Btau, 2 ) + pow( VLS( cur, "_Atau", 1 ) - CURRENT, 2 ) );
-			
+///////////////////////////////////////////////////////		
 			v[5] += imiProb[ i++ ] = ( v[6] > 0 ) ? 1 / v[6] : 0;
 		}
-///////////////////////////////////////////////////////		
-	// else
-		//
 
 	if ( v[5] > 0 )
 	{
@@ -127,16 +124,6 @@ WRITE( "_inn", v[11] );
 WRITE( "_imi", v[12] );
 
 RESULT( v[0] )
-
-/*
-EQUATION ("_Test")
-v[0]=0;
-if ( VS(cur,"_public1" )==1 )				// public firms don't exit
-	{
-	v[0]=1;
-  }
-RESULT( v[0] )
-*/
 
 
 EQUATION( "_Deb1max" )
@@ -267,7 +254,8 @@ EQUATION( "_RD" )
 /*
 R&D expenditure of firm in capital-good sector
 */
-//EXPERIMENT 3
+
+///////////////////EXPERIMENT 3////////////////////////////////////////////////
 //The private firms follow the same rules as in the previous version, the public will invest as top invester (see equation maxRD in capital.h)
 
 if (V("_public1")==0) {  
@@ -599,7 +587,6 @@ Imitation success (1) or failure (0) for firm in capital-good sector
 Updated in '_Atau'
 */
 
-
 EQUATION_DUMMY( "_inn", "" )
 /*
 Innovation success (1) or failure (0) for firm in capital-good sector
@@ -611,6 +598,3 @@ EQUATION_DUMMY( "_qc1", "cScores" )
 Credit class of firm in sector 1 (1,2,3,4)
 Updated in 'cScores'
 */
-
-EQUATION_DUMMY("_pubRD", "")
-

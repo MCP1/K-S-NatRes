@@ -1,18 +1,10 @@
 K+S Model with National Research Labs (version 0.3.1)
-
-
 =====================================================
-
-Implementation of the the K+S with Public Firms and a National Research Lab. Based on the K+S version with Banks and Variable number of firms.
-
-Main Reference:
-Dosi, G., Lamperti, F., Mazzucato, M., Napoletano, M. and Roventini, A., 2018. The Entrepreneurial State at Work: an Agent Based Exploration.
 
 This version copyright by Marcelo C. Pereira.
 The original K+S code was developed by Andrea Roventini, Mauro Napoletano, Tania Treibich, and Marcelo Pereira.
-Expansion by Danilo Spinola.
 
-This is a full rewrite of the original "Schumpeter meeting Keynes" (K+S) model with Public Firms and a National Research Lab, plus the finance extensions and a variable number of firms in both sectors. Differently from original versions, the entire the model was recoded into regular LSD equations. There is no guarantee this version matches the results of original version exactly, due to intrinsic differences between programming approaches.
+This is a full rewrite of the original "Schumpeter meeting Keynes" (K+S) model, plus the finance extensions and a variable number of firms in both sectors. Differently from original versions, the entire the model was recoded into regular LSD equations. There is no guarantee this version matches the results of original version exactly, due to intrinsic differences between programming approaches.
 
 
 Relevant references
