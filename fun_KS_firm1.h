@@ -23,7 +23,7 @@ double xi = VS( PARENT, "xi" );					// share of R&D for innovation
 double L1rdN = VL( "_L1rd", 1 ) * VS( LABSUPL2, "Ls0" ) / VLS( LABSUPL2, "Ls", 1 );
 
 // innovation process (success probability)
-//Experiment 1: 
+//EXPERIMENT 1: Add a public subsidy to R&D Spending. Addition of the variable L1rdSub 
 v[1] = 1 - exp( - VS( PARENT, "zeta1" ) * xi * L1rdN * (1+VS( PARENT, "L1rdSub")));
 // Extra subsidy: xi*(1+L1rdSub)*L1rdN - This is an extra cost of the government that needs to be considered as public deficit
 
@@ -58,16 +58,18 @@ if ( bernoulli( v[4] ) )						// imitation succeeded?
 			imiProb[ i++ ] = 0;					// can't self-imitate
 		else
 		{
-		// EXPERIMENT 3 - PUBLIC FIRMS EXPANDING TECHNOLOGICAL DISTANCE
+	
 			v[6] = sqrt( pow( VLS( cur, "_Btau", 1 ) - Btau, 2 ) +
 						 pow( VLS( cur, "_Atau", 1 ) - CURRENT, 2 ) );
+/////////////  EXPERIMENT 3 ///////////////////////////
+//PUBLIC FIRMS EXPANDING TECHNOLOGICAL DISTANCE
+// Public firm can expand the technological distance to allow for immitation. However this does not change the final result.
 			if (V("_public1")==1) 
-						// Public firm can expand the technological distance to allow for immitation
 						v[6]=(1+VS(PARENT, "pubTechDist"))*sqrt( pow( VLS( cur, "_Btau", 1 ) - Btau, 2 ) + pow( VLS( cur, "_Atau", 1 ) - CURRENT, 2 ) );
 			
 			v[5] += imiProb[ i++ ] = ( v[6] > 0 ) ? 1 / v[6] : 0;
 		}
-		
+///////////////////////////////////////////////////////		
 	// else
 		//
 
@@ -265,8 +267,10 @@ EQUATION( "_RD" )
 /*
 R&D expenditure of firm in capital-good sector
 */
-//Experiment 3
-if (V("_public1")==0) {  //The private firms follow the same rules as in the previous version, the public will invest as top invester (see equation maxRD in capital.h)
+//EXPERIMENT 3
+//The private firms follow the same rules as in the previous version, the public will invest as top invester (see equation maxRD in capital.h)
+
+if (V("_public1")==0) {  
 v[1] = VL( "_S1", 1 );							// sales in previous period
 v[2] = VS( PARENT, "nu" );						// R&D share of sales
 

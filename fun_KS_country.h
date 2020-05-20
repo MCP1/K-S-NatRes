@@ -73,7 +73,9 @@ Government expenditure (exogenous demand)
 */
 
 i = V( "flagGovExp" );							// type of govt. exped.
-// Think about public firms and labor equations...
+
+// ADD THE PUBLIC SPENDING ON R&D, FINANCING INVESTMENTS.
+
 v[2] = VS( LABSUPL0, "Ls" ) - VS( LABSUPL0, "L" );// unemployed workers
 
 v[0] = 0;										// wages accumulator
@@ -89,6 +91,11 @@ else
 	{
 		// pay unemployment benefit
 		v[0] += v[2] * VS( LABSUPL0, "wU" );
+		
+		//FINANCE SUBSIDIES, INVESTMENT DISCOUNTS AND PUBLIC FIRMS
+		// GOVERNMENTAL COST OF SUBSIDIES:
+		// GOVERNMENTAL COST OF INVESTMENT DISCOUNTS:
+		// GOVERNMENTAL COST OF PUBLIC FIRMS & PUBLIC FIRMS BAILOUTS
 		
 		// if government has an accumulated surplus, it may spend it 
 		v[3] = VL( "Deb", 1 );

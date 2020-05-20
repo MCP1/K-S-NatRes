@@ -36,10 +36,17 @@ v[2] = v[1] / V( "_Avint" ) - v[1] / VS( cur, "_Atau" );
 
 // if new machine cost is not better in absolute terms or
 // payback period of replacing current vintage is over b
-//Experiment 2 - discount in investments - Exactly as Francesco did in his paper/equation, by changing the factor that is compared to the payback
+
+///////////////////EXPERIMENT 2 /////////////////////////// 
+//discount in investments - I did exactly as Francesco did in his paper/equation, by changing the factor that is compared to the payback.
+// Add the parameter invSub (investment subsidies).
 if ( v[2] <= 0 || 
 	 (1+VS( GRANDPARENT, "invSub")) * VS( cur, "_p1" ) / VS( GRANDPARENT, "m2" ) / v[2] > VS( GRANDPARENT, "b" ) )
+
+
 	END_EQUATION( 0 );							// nothing to scrap	
+
+// Public Cost of discount in investments: discCost=(SI/dim_mach)*(_p1)*invSub
 
 RESULT( V( "_nVint" ) )							// scrap if can be replaced
 

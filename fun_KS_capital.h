@@ -174,11 +174,10 @@ INIT_TSEARCHT( "Firm1", i );					// prepare turbo search indexing
 
 RESULT( v[0] )
 
-
+//////////////////////////// EXPERIMENT 3////////////////////////////////
+// calculate the maximun R&D done by private firms each round. The public firm will match the same R&D as the private firm with higher R&D
 // Firms that have the maximun investment in RD. This will be used by the public firm.
-// Experiment 3 - calculate the maximun R&D done by private firms each round. The public firm will match the same R&D as the private firm with higher R&D
-
-
+// Control this by setting the number of public firms f1p to zero.
 EQUATION ("maxRD")
 v[0]=0;
 CYCLE( cur, "Firm1" )
@@ -186,7 +185,6 @@ CYCLE( cur, "Firm1" )
 		if (v[0]<VS( cur, "_RD" ))
 		v[0]=VS( cur, "_RD" );
 }
-
 CYCLE( cur, "Firm1" )
 {
 	if( VS( cur, "_public1" ) )
@@ -195,19 +193,8 @@ CYCLE( cur, "Firm1" )
 v[1]=v[0];
 v[0]=0;
 RESULT( v[1] )
+//////////////////////////////////////////////////////////////////////////
 
-/*
-EQUATION ("pubRD")
-v[1]=V("maxRD");
-CYCLE( cur, "Firm1" )
-{ v[0]=0;
-	if ( VS( cur, "_public1" ) )	
-	{
-		v[0]=1;
-	}
-}	
-RESULT( v[0] )
-*/
 
 /*============================ SUPPORT EQUATIONS =============================*/
 
@@ -410,58 +397,7 @@ Rate of bankrupt firms in capital-good sector
 Updated in 'entry1exit'
 */
 //EQUATION_DUMMY( "maxRD", "" )
-//////////////////////
-/* 
-IMPLEMENTATION OF THE PUBLIC FIRM - SPECIAL RULES.
-EXPERIMENT 4: Public Firm
-There is now the addition of a Public Firm in the system that invests all its profit on R&D, and that freely diffuses its technology to the other firms.
-// 1) Firm invest as top invester (reinvest all its profits)
-// 2) Everyone can immitate the public firm
 
-On Francesco’s code:
-RD(1,1)=nu_state*S1(1,1);
- Everyone can imitate firm 1
-if ( ((1+mi1)*w(1)/(A1pimm(i)*a))*(w(1)/A1imm(i))*b >= ((1+mi1)*w(1)/(A1p(1)*a))*(w(1)/A1(1))*b ) 
-	A1imm(i)=A1(1); 
-	A1pimm(i)=A1p(1); 
-	uu5(i)=uu5(1); 
-	uu6(i)=uu6(1);
-	Employment on firm 1: employment_state_firm=(Ld1(1)+Ld1rd(1))/LD;
-void MACRO(void)
-if (flag_entr_state==4)
-	 {
-	 	Def=G(1)-Tax-Pi1(1)+expenses_nofailure_state_firm;
-	 }
-void TECHANGEND(void)
-			if (flag_entr_state==4 && S1(1,1)==0)  		// If it is the case of state firm it invest as the top invester
-			{
-				max_rd=2;
-				for (int i = 2; i <=N1; ++i)
-				{
-					if (RD_nom(2,i)>=RD_nom(2,max_rd)){max_rd=i;}					
-				}
-				RD_nom(1,1)=RD_nom(2,max_rd);
-			}
-if (flag_entr_state==4)
-		{
-			RD(1,1)=nu_state*S1(1,1);
-		}
-
-//////////////////
-EXPERIMENT 5:NATIONAL RESEARCH LAB
-The NRL increase technological opportunities, doing radical innovations. It is not a public firm itself, it has a different dynamics.
-//National Research Lab
-// My interpretation of Francesco's code
-
-// Idea: implement a National Research Lab in the K+S
-
-/* 
-There are two main objectives in this exercize. 
-
-First is to implement a public capital-good firm, capable of freely diffusing knowledge and that reinvest all its profits. For that I am using this f1p
-
-Second objective is a National Research Lab, that is not a firm on the same sense as the public and private ones. It is mainly a public funded laboratory that increase tecnology opportunities (change x1inf and x1sup)
-*/
 
 
 /////////// EXPERIMENT 4: NATIONAL RESEARCH LAB ////////////////////
@@ -497,6 +433,7 @@ EQUATION_DUMMY( "x1supNRL", "" )
 /* 
 
 /////////////////////
+////////////////////
 //EXPERIMENTS 1 AND 2 BY FRANCESCO
 /*
 EXPERIMENT 1: Include subsidy to R&D Activities. In this experiment Francesco adds an α subsidy to spendings in RD: RD_sub=RD*(1+α).
@@ -554,15 +491,60 @@ void PRODORD(void)
 		}
 */
 
-
-
-
-
-
-
-
-
 // From now on it is only trash and things to think about.
+
+//////////////////////
+/* 
+IMPLEMENTATION OF THE PUBLIC FIRM - SPECIAL RULES.
+EXPERIMENT 4: Public Firm
+There is now the addition of a Public Firm in the system that invests all its profit on R&D, and that freely diffuses its technology to the other firms.
+// 1) Firm invest as top invester (reinvest all its profits)
+// 2) Everyone can immitate the public firm
+
+On Francesco’s code:
+RD(1,1)=nu_state*S1(1,1);
+ Everyone can imitate firm 1
+if ( ((1+mi1)*w(1)/(A1pimm(i)*a))*(w(1)/A1imm(i))*b >= ((1+mi1)*w(1)/(A1p(1)*a))*(w(1)/A1(1))*b ) 
+	A1imm(i)=A1(1); 
+	A1pimm(i)=A1p(1); 
+	uu5(i)=uu5(1); 
+	uu6(i)=uu6(1);
+	Employment on firm 1: employment_state_firm=(Ld1(1)+Ld1rd(1))/LD;
+void MACRO(void)
+if (flag_entr_state==4)
+	 {
+	 	Def=G(1)-Tax-Pi1(1)+expenses_nofailure_state_firm;
+	 }
+void TECHANGEND(void)
+			if (flag_entr_state==4 && S1(1,1)==0)  		// If it is the case of state firm it invest as the top invester
+			{
+				max_rd=2;
+				for (int i = 2; i <=N1; ++i)
+				{
+					if (RD_nom(2,i)>=RD_nom(2,max_rd)){max_rd=i;}					
+				}
+				RD_nom(1,1)=RD_nom(2,max_rd);
+			}
+if (flag_entr_state==4)
+		{
+			RD(1,1)=nu_state*S1(1,1);
+		}
+
+//////////////////
+EXPERIMENT 5:NATIONAL RESEARCH LAB
+The NRL increase technological opportunities, doing radical innovations. It is not a public firm itself, it has a different dynamics.
+//National Research Lab
+// My interpretation of Francesco's code
+
+// Idea: implement a National Research Lab in the K+S
+
+/* 
+There are two main objectives in this exercize. 
+
+First is to implement a public capital-good firm, capable of freely diffusing knowledge and that reinvest all its profits. For that I am using this f1p
+
+Second objective is a National Research Lab, that is not a firm on the same sense as the public and private ones. It is mainly a public funded laboratory that increase tecnology opportunities (change x1inf and x1sup)
+*/
 
 /*
 IMPLEMENTATION OF THE PUBLIC FIRM - SPECIAL RULES.

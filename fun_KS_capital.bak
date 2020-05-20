@@ -177,7 +177,7 @@ RESULT( v[0] )
 
 // Firms that have the maximun investment in RD. This will be used by the public firm.
 // Experiment 3 - calculate the maximun R&D done by private firms each round. The public firm will match the same R&D as the private firm with higher R&D
-
+// Control this by setting the number of public firms f1p to zero.
 
 EQUATION ("maxRD")
 v[0]=0;
@@ -195,19 +195,6 @@ CYCLE( cur, "Firm1" )
 v[1]=v[0];
 v[0]=0;
 RESULT( v[1] )
-
-/*
-EQUATION ("pubRD")
-v[1]=V("maxRD");
-CYCLE( cur, "Firm1" )
-{ v[0]=0;
-	if ( VS( cur, "_public1" ) )	
-	{
-		v[0]=1;
-	}
-}	
-RESULT( v[0] )
-*/
 
 /*============================ SUPPORT EQUATIONS =============================*/
 

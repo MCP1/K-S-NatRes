@@ -212,16 +212,16 @@ Label Root
 			Var: inn
 			Var: RD_ES
 			Param: xi_ES
-			Param: zeta_ES
 			Var: x1infNRL
 			Param: alpha1_ES
 			Param: beta1_ES
 			Param: x1inf_ES
 			Param: x1sup_ES
 			Var: x1supNRL
-			Param: L1rdSub
 			Var: maxRD
 			Param: pubTechDist
+			Param: L1rdSub
+			Param: zeta_ES
 
 		}
 
@@ -632,7 +632,7 @@ Param: Deb10ratio 0 n + n n	1
 Param: F10 0 n + n n	50
 Param: F1max 0 n + n n	50
 Param: F1min 0 n + n n	50
-Param: F1p 0 n + n n	1
+Param: F1p 0 n + n n	0
 Param: L1rdMax 0 n + n n	0.2
 Param: L1shortMax 0 n + n n	1
 Param: NW10 0 n + n n	10000
@@ -682,17 +682,17 @@ Var: exit1 0 s + n n
 Var: imi 0 s + n n
 Var: inn 0 s + n n
 Var: RD_ES 0 s + n n
-Param: xi_ES 0 n + n n	0.0001
-Param: zeta_ES 0 n + n n	0
+Param: xi_ES 0 n + n n	0
 Var: x1infNRL 1 s + d n	-0.15
 Param: alpha1_ES 0 n + n n	3
-Param: beta1_ES 0 n + n n	3
-Param: x1inf_ES 0 n + n n	0
+Param: beta1_ES 0 n + n n	2
+Param: x1inf_ES 0 n + n n	-0.15
 Param: x1sup_ES 0 n + n n	0.15
 Var: x1supNRL 1 s + n n	0.15
-Param: L1rdSub 0 n + n n	0.1
 Var: maxRD 0 s + n n
 Param: pubTechDist 0 n + n n	0
+Param: L1rdSub 0 n + n n	0
+Param: zeta_ES 0 n + n n	0
 
 Object: Firm1 C	1
 Param: _ID1 0 n + n n	0
@@ -818,7 +818,7 @@ Var: exit2 0 s + n p
 Var: l2avg 1 s + n n	0
 Var: oldVint 1 n + n n	1
 Var: p2avg 0 s + n n
-Param: invSub 0 n + n n	0.2
+Param: invSub 0 n + n n	0
 
 Object: Firm2 C	1
 Param: _ID2 0 n + n n	0
@@ -2034,12 +2034,6 @@ _INIT_
 
 END_DESCRIPTION
 
-Parameter_zeta_ES
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
 Variable_x1infNRL
 (no description available)
 _INIT_
@@ -2076,12 +2070,6 @@ _INIT_
 
 END_DESCRIPTION
 
-Parameter_L1rdSub
-(no description available)
-_INIT_
-
-END_DESCRIPTION
-
 Variable_maxRD
 (no description available)
 _INIT_
@@ -2089,6 +2077,18 @@ _INIT_
 END_DESCRIPTION
 
 Parameter_pubTechDist
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_L1rdSub
+(no description available)
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_zeta_ES
 (no description available)
 _INIT_
 

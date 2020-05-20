@@ -23,14 +23,14 @@ double xi = VS( PARENT, "xi" );					// share of R&D for innovation
 double L1rdN = VL( "_L1rd", 1 ) * VS( LABSUPL2, "Ls0" ) / VLS( LABSUPL2, "Ls", 1 );
 
 // innovation process (success probability)
-//Experiment 1: 
+//EXPERIMENT 1: Add a public subsidy to R&D Spending. Addition of the variable L1rdSub 
 v[1] = 1 - exp( - VS( PARENT, "zeta1" ) * xi * L1rdN * (1+VS( PARENT, "L1rdSub")));
 // Extra subsidy: xi*(1+L1rdSub)*L1rdN - This is an extra cost of the government that needs to be considered as public deficit
 
 if ( bernoulli( v[1] ) )						// innovation succeeded?
 {
-	double x1inf = VS( PARENT, "x1infNRL" );		// lower beta inno. draw support 
-	double x1sup = VS( PARENT, "x1supNRL" );		// upper beta inno. draw support 
+	double x1inf = VLS( PARENT, "x1infNRL", 1 );		// lower beta inno. draw support 
+	double x1sup = VLS( PARENT, "x1supNRL", 1 );		// upper beta inno. draw support 
 	double alpha1 = VS( PARENT, "alpha1" );		// beta distrib. alpha parameter
 	double beta1 = VS( PARENT, "beta1" );		// beta distrib. beta parameter
 	
@@ -265,8 +265,10 @@ EQUATION( "_RD" )
 /*
 R&D expenditure of firm in capital-good sector
 */
-//Experiment 3
-if (V("_public1")==0) {  //The private firms follow the same rules as in the previous version, the public will invest as top invester (see equation maxRD in capital.h)
+//EXPERIMENT 3
+//The private firms follow the same rules as in the previous version, the public will invest as top invester (see equation maxRD in capital.h)
+
+if (V("_public1")==0) {  
 v[1] = VL( "_S1", 1 );							// sales in previous period
 v[2] = VS( PARENT, "nu" );						// R&D share of sales
 
