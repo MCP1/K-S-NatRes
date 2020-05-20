@@ -208,6 +208,7 @@ Label Root
 			Var: exit1
 			Var: imi
 			Var: inn
+			Param: L1rdSub
 
 		}
 
@@ -666,6 +667,7 @@ Var: entry1exit 0 n + n n
 Var: exit1 0 s + n n
 Var: imi 0 s + n n
 Var: inn 0 s + n n
+Param: L1rdSub 0 n + n n	0
 
 Object: Firm1 C	1
 Param: _ID1 0 n + n n	0
@@ -925,7 +927,7 @@ Var: wReal 0 s + n n
 
 SIM_NUM 1
 SEED 1
-MAX_STEP 500
+MAX_STEP 50
 EQUATION fun_KS.cpp
 MODELREPORT modelreport.html
 
@@ -1988,6 +1990,12 @@ END_DESCRIPTION
 
 Variable_inn
 Number of firms that successfully innovate in capital-good sector
+_INIT_
+
+END_DESCRIPTION
+
+Parameter_L1rdSub
+(no description available)
 _INIT_
 
 END_DESCRIPTION

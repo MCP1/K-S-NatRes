@@ -19,14 +19,13 @@ Nominal (monetary terms) aggregated consumption
 i = V( "flagTax" );								// taxation rule
 v[1] = V( "tr" );								// tax rate
 
-// workers' wages - Public firms included in W1
+// workers' wages
 v[0] = VS( CAPSECL0, "W1" ) + VS( CONSECL0, "W2" );
 
 if ( i == 1 )
 	v[0] *= 1 - v[1];							// apply tax to workers
 
 // capitalists' income (past period dividends)
-// Public firms do not distribute dividends in this specific implementation, it reinvests all the profits. So I will have to implement a rule for that.
 v[0] += VLS( CAPSECL0, "Div1", 1 ) + VLS( CONSECL0, "Div2", 1 ) + 
 		VLS( FINSECL0, "DivB", 1 );
 
@@ -73,9 +72,6 @@ Government expenditure (exogenous demand)
 */
 
 i = V( "flagGovExp" );							// type of govt. exped.
-
-// ADD THE PUBLIC SPENDING ON R&D, FINANCING INVESTMENTS.
-
 v[2] = VS( LABSUPL0, "Ls" ) - VS( LABSUPL0, "L" );// unemployed workers
 
 v[0] = 0;										// wages accumulator
@@ -91,11 +87,6 @@ else
 	{
 		// pay unemployment benefit
 		v[0] += v[2] * VS( LABSUPL0, "wU" );
-		
-		//FINANCE SUBSIDIES, INVESTMENT DISCOUNTS AND PUBLIC FIRMS
-		// GOVERNMENTAL COST OF SUBSIDIES:
-		// GOVERNMENTAL COST OF INVESTMENT DISCOUNTS:
-		// GOVERNMENTAL COST OF PUBLIC FIRMS & PUBLIC FIRMS BAILOUTS
 		
 		// if government has an accumulated surplus, it may spend it 
 		v[3] = VL( "Deb", 1 );
@@ -155,8 +146,6 @@ EQUATION( "Def" )
 /*
 Government current deficit (negative if superavit)
 */
-
-// Just to remember that I have to add to the public deficit the costs of public firms to guarantee stock-flow consistency.
 
 // interest paid on public debt
 v[1] = VLS( FINSECL0, "r", 1 ) * VL( "Deb", 1 );		

@@ -16,7 +16,6 @@ Work force (labor) size employed by capital-good sector
 Updates 'L1rd'
 */
 
-// Public firms are included in L1d - Think about rules.
 v[1] = VS( LABSUPL1, "Ls" );					// available labor force
 v[2] = V( "L1rd" );								// R&D labor in sector 1
 v[3] = V( "L1d" );								// desired workers in sector 1
@@ -194,7 +193,6 @@ v[1]=v[0];
 v[0]=0;
 RESULT( v[1] )
 //////////////////////////////////////////////////////////////////////////
-
 
 /*============================ SUPPORT EQUATIONS =============================*/
 
@@ -377,29 +375,6 @@ else
 RESULT( v[0] )
 
 
-/*============================= DUMMY EQUATIONS ==============================*/
-
-EQUATION_DUMMY( "entry1", "entry1exit" )
-/*
-Rate of entering firms in capital-good sector
-Updated in 'entry1exit'
-*/
-
-EQUATION_DUMMY( "exit1", "entry1exit" )
-/*
-Rate of exiting firms in capital-good sector
-Updated in 'entry1exit'
-*/
-
-EQUATION_DUMMY( "exit1fail", "entry1exit" )
-/*
-Rate of bankrupt firms in capital-good sector
-Updated in 'entry1exit'
-*/
-//EQUATION_DUMMY( "maxRD", "" )
-
-
-
 /////////// EXPERIMENT 4: NATIONAL RESEARCH LAB ////////////////////
 EQUATION( "RD_ES" ) //R&D used for radical innovations.
 v[0]= V("xi_ES"); // xi parameter for the NRL 
@@ -407,7 +382,7 @@ v[1]= VS( PARENT, "GDP" ); //GDP
 v[2]=v[0]*v[1]; // Invest part of the GDP in the NRL
 RESULT(v[2])
 
-EQUATION( "x1infNRL" ) //radical innovation - increase technological opportunities (also updates x1sup)
+EQUATION( "x1infNRL" ) //radical innovation - increase technological opportunities (also updates x1supNRL)
 
 v[0] = V("RD_ES"); 
 v[1] = 1 - exp( - V("zeta_ES") * v[0] ); //Zeta_ES is the Zeta for radical innovations. v[1] is the bernoulli parameter
@@ -430,380 +405,23 @@ if ( bernoulli( v[1] )==1 )						// radical innovation succeeded?
 RESULT( v[4] )
 
 EQUATION_DUMMY( "x1supNRL", "" )
-/* 
 
-/////////////////////
-////////////////////
-//EXPERIMENTS 1 AND 2 BY FRANCESCO
+/*============================= DUMMY EQUATIONS ==============================*/
+
+EQUATION_DUMMY( "entry1", "entry1exit" )
 /*
-EXPERIMENT 1: Include subsidy to R&D Activities. In this experiment Francesco adds an α subsidy to spendings in RD: RD_sub=RD*(1+α).
-In Francesco’s code:
-flag_entr_state == 1
-void MACRO(void)	
-if (flag_entr_state==1 || flag_entr_state==3)
-	 {
-	 	Def+=total_RD_sub;
-	 }
-void TECHANGEND(void) // Cambiamento Tecnico Endogeno
-if (flag_entr_state==1 || flag_entr_state==3)
-		{
-			//RD_sub(i)=RD_sub_share*GDP(2)/N1;
-			RD_sub(i)=RD(1,i)*alpha_RD;
-			RD(1,i)=RD(1,i)+RD_sub(i);
-			total_RD_sub += RD_sub(i);
-		}
-
-EXPERIMENT 2: Tax incentives to investments// Investment Discounts)
-Firm j buy new machine if, and only if:
-	(p^(new,B)*(1-β))/(c_j^con (t)-c^new )≤b 	
-In the code:
-flag_entr_state == 2
-void SCRAPPING(void)	
-if (flag_entr_state==2)
-				{
-					if (w(2) > 0 && A(tt,i) > 0 && A1(indforn) > 0)
-					
-					payback=p1(1,indforn)*(1-beta_disc)/(w(2)/A(tt,i)-w(2)/A1(indforn));
-
-					else cerr << "\n\n ERRORE: payback divisione per zero!!!" << endl;
-				}
-// Entrepreneurial state -- invest discounts -- public cost
-					if (flag_entr_state==2)
-					{
-						disc_cost(j) = (SId(j)/dim_mach)*p1(1,indforn)*beta_disc;
-						total_public_cost_disc += disc_cost(j);
-					}
-void PRODORD(void)	
-// Entrepreneurial state - invest disc
-	if (flag_entr_state==2)
-	{
-			if ( (SId(j)/dim_mach)*p1prova*(1-beta_disc) < NW)
-	{
-		SI(1,j)=SId(j);
-	}
-	else 
-	{	if ((SId(j)/dim_mach)*p1prova*(1-beta_disc)-NW <= prestmax) 	{
-			SI(1,j)=SId(j);
-		}
-		else 
-		{
-			SI(1,j)=floor((NW + prestmax)/p1(1,indforn))*dim_mach;
-		}
+Rate of entering firms in capital-good sector
+Updated in 'entry1exit'
 */
 
-// From now on it is only trash and things to think about.
-
-//////////////////////
-/* 
-IMPLEMENTATION OF THE PUBLIC FIRM - SPECIAL RULES.
-EXPERIMENT 4: Public Firm
-There is now the addition of a Public Firm in the system that invests all its profit on R&D, and that freely diffuses its technology to the other firms.
-// 1) Firm invest as top invester (reinvest all its profits)
-// 2) Everyone can immitate the public firm
-
-On Francesco’s code:
-RD(1,1)=nu_state*S1(1,1);
- Everyone can imitate firm 1
-if ( ((1+mi1)*w(1)/(A1pimm(i)*a))*(w(1)/A1imm(i))*b >= ((1+mi1)*w(1)/(A1p(1)*a))*(w(1)/A1(1))*b ) 
-	A1imm(i)=A1(1); 
-	A1pimm(i)=A1p(1); 
-	uu5(i)=uu5(1); 
-	uu6(i)=uu6(1);
-	Employment on firm 1: employment_state_firm=(Ld1(1)+Ld1rd(1))/LD;
-void MACRO(void)
-if (flag_entr_state==4)
-	 {
-	 	Def=G(1)-Tax-Pi1(1)+expenses_nofailure_state_firm;
-	 }
-void TECHANGEND(void)
-			if (flag_entr_state==4 && S1(1,1)==0)  		// If it is the case of state firm it invest as the top invester
-			{
-				max_rd=2;
-				for (int i = 2; i <=N1; ++i)
-				{
-					if (RD_nom(2,i)>=RD_nom(2,max_rd)){max_rd=i;}					
-				}
-				RD_nom(1,1)=RD_nom(2,max_rd);
-			}
-if (flag_entr_state==4)
-		{
-			RD(1,1)=nu_state*S1(1,1);
-		}
-
-//////////////////
-EXPERIMENT 5:NATIONAL RESEARCH LAB
-The NRL increase technological opportunities, doing radical innovations. It is not a public firm itself, it has a different dynamics.
-//National Research Lab
-// My interpretation of Francesco's code
-
-// Idea: implement a National Research Lab in the K+S
-
-/* 
-There are two main objectives in this exercize. 
-
-First is to implement a public capital-good firm, capable of freely diffusing knowledge and that reinvest all its profits. For that I am using this f1p
-
-Second objective is a National Research Lab, that is not a firm on the same sense as the public and private ones. It is mainly a public funded laboratory that increase tecnology opportunities (change x1inf and x1sup)
-*/
-
+EQUATION_DUMMY( "exit1", "entry1exit" )
 /*
-IMPLEMENTATION OF THE PUBLIC FIRM - SPECIAL RULES.
-EXPERIMENT 4: Public Firm
-There is now the addition of a Public Firm in the system that invests all its profit on R&D, and that freely diffuses its technology to the other firms.
-On Francesco’s code:
-RD(1,1)=nu_state*S1(1,1);
- Everyone can imitate firm 1
-if ( ((1+mi1)*w(1)/(A1pimm(i)*a))*(w(1)/A1imm(i))*b >= ((1+mi1)*w(1)/(A1p(1)*a))*(w(1)/A1(1))*b ) 
-	A1imm(i)=A1(1); A1pimm(i)=A1p(1); uu5(i)=uu5(1); uu6(i)=uu6(1);
-	Employment on firm 1: employment_state_firm=(Ld1(1)+Ld1rd(1))/LD;
-	
-void MACRO(void)
-if (flag_entr_state==4)
-	 {
-	 	Def=G(1)-Tax-Pi1(1)+expenses_nofailure_state_firm;
-	 }
-void TECHANGEND(void)
-			if (flag_entr_state==4 && S1(1,1)==0)  		// If it is the case of state firm it invest as the top invester
-			{
-				max_rd=2;
-				for (int i = 2; i <=N1; ++i)
-				{
-					if (RD_nom(2,i)>=RD_nom(2,max_rd)){max_rd=i;}					
-				}
-				RD_nom(1,1)=RD_nom(2,max_rd);
-			}
-if (flag_entr_state==4)
-		{
-			RD(1,1)=nu_state*S1(1,1);
-		}
-
-
-REPETITION OF WHAT IS ABOVE:
-Experiment 5. NATIONAL RESEARCH LAB
-
-void MACRO(void)
-if (flag_entr_state==5)
-	 {
-	 	Def=G(1)-Tax-Pi1(1)+expenses_nofailure_state_firm+RD_entr_state;
-	 }
-void TECHANGEND(void)
-if (flag_entr_state==5 && i==1)
-	   {	RD_entr_state=share_GDP_RD_entr_state*GDP(2);
-			RD(1,1)=nu_state*S1(1,1)*(1-share_enlarge_opp); // invest in standard RD
-			tot_RD_state_enlarge= RD(1,1)*share_enlarge_opp+RD_entr_state;
-			CUM_RD_entr_state += tot_RD_state_enlarge;
-		if (flag_entr_state_logistic==0) // no logistic
-		{				
-			parber_entr_state=1-exp(-o1_ent_state*CUM_RD_entr_state);														
-			Inn_entr_state=bnldev(parber_entr_state,1,p_seed);
-		}
-		else // use of the logistic
-		{
-			logistic_value = 1/(1+exp(logistic_1*(CUM_RD_entr_state-logistic_2)));
-			parber_entr_state=1-exp(-o1_ent_state_logistic*logistic_value);									
-			Inn_entr_state=bnldev(parber_entr_state,1,p_seed);
-		}
-		if (Inn_entr_state==1)
-		{		rnd_entr_state=betadev(b_a1_opp,b_b1_opp,p_seed);					
-				rnd_entr_state=change_uu5_entr_state+rnd*(change_uu6_entr_state-change_uu5_entr_state);						
-				uu5(1)=uu5(1)*(1+rnd_entr_state/2);
-				uu6(1)=uu6(1)*(1+rnd_entr_state/2);
-				CUM_RD_entr_state=0; 				// reset the cumulative RD		}
-		cout << "Entr state innovation success " << Inn_entr_state << endl;
-		cout << "Entr state rnd_entr_state " << rnd_entr_state << endl;
-		if (flag_entr_state_logistic==1)
-		{
-			cout << "value of the logistic curve" << logistic_value;
-		}
-		cout << "uu6" << uu6(1) << endl;
-		cout << "mkt share state firm" << f1(1,1) << endl;
-		cout << "prod state firm" << A1p(1) << endl;
-		cout << "prod media" << Am1 << endl;
-		cout << "profitti impresa stato" << Pi1(1); 
-	   } // end experiment 5
-
+Rate of exiting firms in capital-good sector
+Updated in 'entry1exit'
 */
 
+EQUATION_DUMMY( "exit1fail", "entry1exit" )
 /*
-//Reset the cumulative RD: 
-//(11)	 CUM_RD_entr_state=0;
-	v[4]
-}
-else
-	v[2] = v[3] = 0;							// innovation failure
-
-
+Rate of bankrupt firms in capital-good sector
+Updated in 'entry1exit'
 */
-
-// 
-//RD_NRL = _S1*(xi_EOP)
-
-//RD_EOP = RD_ES+RD_NRL
-//CUM_RD_EOP=+RD_EOP
-
-//Parber_ES = 1-exp(-01_ES*CUM_RD_EOP)
-
-//INN_ES = Bernoulli(Parber_ES)
-//If (INN_ES==1)
-//PAR_TO=beta(a,b)
-//TO=change_xinf+PAR_TO*(change_xsup-change_xinf)
-
-//x1inf= uu5(1)*(1+rnd_entr_state/2); 
-//x1sup=uu6(1)=uu6(1)*(1+rnd_entr_state/2);
-
-// Francesco's code:
-//R&D spending share for total firms: 
-//(1)	RD_entr_state=share_GDP_RD_entr_state*GDP(2);
-//NRL (firm 1) spends part of its sales in RD: 
-//(2)	RD(1,1)=nu_state*S1(1,1)*(1-share_enlarge_opp); 
-//The total RD to enlarge opportunities is the share of firm 1 and the share of all other firms that can generate radical innovations
-//(3)	tot_RD_state_enlarge= RD(1,1)*share_enlarge_opp+RD_entr_state; 
-//There is cummulative RD of the entrepreneurial state: 
-//(4)	CUM_RD_entr_state += tot_RD_state_enlarge;
-//The cummulative (CUM_RD_entr_state) is a parameter for the bernoulli: 
-//(5)	parber_entr_state=1-exp(-o1_ent_state*CUM_RD_entr_state);				
-//Define if a radical innovation is succesfull: 
-//(6)	Inn_entr_state=bnldev(parber_entr_state,1,p_seed);
-//(7)	If Inn_entr_state==1
-//Then the radical innovation succeeds
-//Amount of increase in the technological opportunities as a beta distribution:   
-//(8)	 rnd_entr_state=betadev(b_a1_opp,b_b1_opp,p_seed);	
-//Put it in the scale (x1inf,x1sup):
-//(9)	 rnd_entr_state=change_uu5_entr_state+rnd *(change_uu6_entr_state-change_uu5_entr_state); 
-//Increase values of the technology opportunities: 
-//(10)	uu5(1)= uu5(1)*(1+rnd_entr_state/2); uu6(1)=uu6(1)*(1+rnd_entr_state/2);
-//Reset the cumulative RD: 
-//(11)	 CUM_RD_entr_state=0;
-
-
-
-
-
-
-
-
-
-
-
-// Entrepreneurial State Experiments
-
-  /* 
-  
-	for (i=1; i<=N1; i++)
-	{	
-		
-		
-		RD_nom(1,i)=nu*S1(1,i);
-			
-														// Allocazione risorse R&D				
-		if (S1(1,i)==0)								// Se nel periodo precedente clienti non hanno investito,
-		{											// impresa investe in RD come nel periodo precedente
-			RD_nom(1,i)=RD_nom(2,i);						// Ci‚àö‚â§ accade anche nel periodo t+1 alle imprese
-			if (nclient(i) < 1)						// entrate al tempo t (perch‚àö¬Æ c'‚àö¬Æ time-to-build)
-			{
-				cerr << "\n\n ERRORE: nclinet < 1!!!" << endl;
-			}
-
-
-			if (flag_entr_state==4 && S1(1,1)==0)  		// If it is the case of state firm it invest as the top invester
-			{
-				max_rd=2;
-				for (int i = 2; i <=N1; ++i)
-				{
-					if (RD_nom(2,i)>=RD_nom(2,max_rd)){max_rd=i;}
-					
-				}
-				RD_nom(1,1)=RD_nom(2,max_rd);
-
-			}
-		}
-		
-		if (w(1)>0)
-			Ld1rd(i)=RD_nom(1,i)/w(1);								// Domanda lavoratori R&D
-		else cerr << "\n\n ERRORE: w=0!!!" << endl;
-        
-
-      if (flagRD==0)
-      {
-        RD(1,i)=RD_nom(1,i);
-      }
-      else
-      {
-      	RD(1,i)=Ld1rd(i);
-      }
-
-	
-						
-		
-		total_RD_economy += RD(1,i);							
-		
-		// Entrepreneural State
-		if (flag_entr_state==4)
-		{
-			RD(1,1)=nu_state*S1(1,1); // State firm is the 1st in the vector
-		}
-
-		
-		if (flag_entr_state==1 || flag_entr_state==3)
-		{
-			//RD_sub(i)=RD_sub_share*GDP(2)/N1;
-			RD_sub(i)=RD(1,i)*alpha_RD;
-			RD(1,i)=RD(1,i)+RD_sub(i);
-			total_RD_sub += RD_sub(i);
-		}
-
-	
-			if (flag_entr_state==5 && i==1)
-	   {
-		
-			RD_entr_state=share_GDP_RD_entr_state*GDP(2);
-
-			RD(1,1)=nu_state*S1(1,1)*(1-share_enlarge_opp); // invest in standard RD
-
-			tot_RD_state_enlarge= RD(1,1)*share_enlarge_opp+RD_entr_state;
-
-			CUM_RD_entr_state += tot_RD_state_enlarge;
-
-		if (flag_entr_state_logistic==0) // no logistic
-		{				
-
-			parber_entr_state=1-exp(-o1_ent_state*CUM_RD_entr_state);							
-											
-			Inn_entr_state=bnldev(parber_entr_state,1,p_seed);
-		}
-		else // use of the logistic
-		{
-			logistic_value = 1/(1+exp(logistic_1*(CUM_RD_entr_state-logistic_2)));
-
-			parber_entr_state=1-exp(-o1_ent_state_logistic*logistic_value);							
-											
-			Inn_entr_state=bnldev(parber_entr_state,1,p_seed);
-
-		}
-
-		if (Inn_entr_state==1)
-		{
-				rnd_entr_state=betadev(b_a1_opp,b_b1_opp,p_seed);					
-				rnd_entr_state=change_uu5_entr_state+rnd*(change_uu6_entr_state-change_uu5_entr_state);						
-				uu5(1)=uu5(1)*(1+rnd_entr_state/2);
-				uu6(1)=uu6(1)*(1+rnd_entr_state/2);
-				CUM_RD_entr_state=0; 				// reset the cumulative RD
-		}
-		
-
-		cout << "Entr state innovation success " << Inn_entr_state << endl;
-		cout << "Entr state rnd_entr_state " << rnd_entr_state << endl;
-		if (flag_entr_state_logistic==1)
-		{
-			cout << "value of the logistic curve" << logistic_value;
-		}
-		cout << "uu6" << uu6(1) << endl;
-		cout << "mkt share state firm" << f1(1,1) << endl;
-		cout << "prod state firm" << A1p(1) << endl;
-		cout << "prod media" << Am1 << endl;
-		cout << "profitti impresa stato" << Pi1(1); 
-
-
-	   } // end experiment 5
-	   
-	   */ 
