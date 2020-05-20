@@ -1,0 +1,34 @@
+
+
+====================> NEW TCL SESSION
+
+(05/20/20 15:39:55)
+Command:
+Path check
+Message:
+LSD directory path includes spaces, move all the LSD directory in another directory without spaces in the path
+-----
+
+(05/20/20 15:39:58)
+Command:
+LsdExit
+Message:
+invalid command name "LsdExit"
+-----
+
+
+====================> NEW TCL SESSION
+
+(05/20/20 15:40:01)
+Command:
+Path check
+Message:
+LSD directory path includes spaces, move all the LSD directory in another directory without spaces in the path
+-----
+
+(05/20/20 15:40:05)
+Command:
+LsdExit
+Message:
+invalid command name "LsdExit"
+-----
